@@ -51,3 +51,4 @@ Commit 3에서 Firebase와의 최소 연동을 위한 준비를 합니다.
 - `docs/ML_MODEL_COMPARISON.md` – MediaPipe Pose vs YOLOv8-Pose 비교 및 모델 선택 전략
 - `docs/DB_SCHEMA_FIRESTORE.md` – Firestore 컬렉션/문서 구조 및 ML 라벨 데이터 스키마
 - `docs/ML_RETRAINING_FLOW.md` – 코치 피드백 기반 ML 재학습/배포 플로우
+- `docs/EXPANSION_PLAN.md` – 요가/웨이트/개인화/YOLOv8 확장 로드맵
