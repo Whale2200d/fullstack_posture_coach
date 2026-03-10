@@ -44,6 +44,7 @@ Commit 3에서 Firebase와의 최소 연동을 위한 준비를 합니다.
 
 ## 문서
 
+- `docs/PROJECT_OVERVIEW.md` – 전체 기획/설계 문서 개요 및 엔드투엔드 흐름 요약
 - `docs/FLUTTER_SETUP.md` – Flutter SDK 설치, 시뮬레이터/에뮬레이터 실행, 각 플랫폼별 실행 방법
 - `docs/FIREBASE_SETUP.md` – Firebase 프로젝트 생성 및 iOS/Android 연결 가이드
 - `docs/REQUIREMENTS.md` – Posture Coach 요구사항 정의서 (기능/비기능, ML/코치/사용자 요구사항)
