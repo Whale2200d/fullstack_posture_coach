@@ -44,8 +44,12 @@ Commit 3에서 Firebase와의 최소 연동을 위한 준비를 합니다.
 
 ## 문서
 
+- `docs/PROJECT_OVERVIEW.md` – 전체 기획/설계 문서 개요 및 엔드투엔드 흐름 요약
 - `docs/FLUTTER_SETUP.md` – Flutter SDK 설치, 시뮬레이터/에뮬레이터 실행, 각 플랫폼별 실행 방법
 - `docs/FIREBASE_SETUP.md` – Firebase 프로젝트 생성 및 iOS/Android 연결 가이드
 - `docs/REQUIREMENTS.md` – Posture Coach 요구사항 정의서 (기능/비기능, ML/코치/사용자 요구사항)
 - `docs/UI_WIREFRAME.md` – 사용자 앱/코치 대시보드 UI 와이어프레임 및 화면 흐름
 - `docs/ML_MODEL_COMPARISON.md` – MediaPipe Pose vs YOLOv8-Pose 비교 및 모델 선택 전략
+- `docs/DB_SCHEMA_FIRESTORE.md` – Firestore 컬렉션/문서 구조 및 ML 라벨 데이터 스키마
+- `docs/ML_RETRAINING_FLOW.md` – 코치 피드백 기반 ML 재학습/배포 플로우
+- `docs/EXPANSION_PLAN.md` – 요가/웨이트/개인화/YOLOv8 확장 로드맵
