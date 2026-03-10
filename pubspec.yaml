@@ -1,0 +1,23 @@
+# CrossFit Posture Coach - Flutter App
+# Commit 2: Flutter 프로젝트 초기 세팅
+
+name: posture_coach
+description: 카메라 기반 자세 분석으로 크로스핏 동작을 시각적으로 교정하는 모바일 앱 (CrossFit Posture Coach).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

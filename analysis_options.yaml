@@ -1,0 +1,9 @@
+# Commit 2: Flutter lint 설정 (flutter_lints)
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - avoid_print
+    - prefer_single_quotes

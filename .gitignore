@@ -35,6 +35,7 @@
 .pub/
 build/
 *.lock
+!pubspec.lock
 
 # Android
 **/android/**/gradle-wrapper.jar
