@@ -48,3 +48,4 @@ Commit 3에서 Firebase와의 최소 연동을 위한 준비를 합니다.
 - `docs/FIREBASE_SETUP.md` – Firebase 프로젝트 생성 및 iOS/Android 연결 가이드
 - `docs/REQUIREMENTS.md` – Posture Coach 요구사항 정의서 (기능/비기능, ML/코치/사용자 요구사항)
 - `docs/UI_WIREFRAME.md` – 사용자 앱/코치 대시보드 UI 와이어프레임 및 화면 흐름
+- `docs/ML_MODEL_COMPARISON.md` – MediaPipe Pose vs YOLOv8-Pose 비교 및 모델 선택 전략
