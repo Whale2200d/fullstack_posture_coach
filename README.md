@@ -50,3 +50,4 @@ Commit 3에서 Firebase와의 최소 연동을 위한 준비를 합니다.
 - `docs/UI_WIREFRAME.md` – 사용자 앱/코치 대시보드 UI 와이어프레임 및 화면 흐름
 - `docs/ML_MODEL_COMPARISON.md` – MediaPipe Pose vs YOLOv8-Pose 비교 및 모델 선택 전략
 - `docs/DB_SCHEMA_FIRESTORE.md` – Firestore 컬렉션/문서 구조 및 ML 라벨 데이터 스키마
+- `docs/ML_RETRAINING_FLOW.md` – 코치 피드백 기반 ML 재학습/배포 플로우
