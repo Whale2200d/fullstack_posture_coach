@@ -1,9 +1,25 @@
-// CrossFit Posture Coach - Entry point
-// Commit 2: Flutter 기본 앱 구조
+// Posture Coach - Entry point
+// Commit 3: Firebase 기본 초기화 추가
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 현재는 iOS/Android에서만 Firebase 설정을 넣어두었으므로,
+  // 그 플랫폼에서만 초기화를 시도한다.
+  if (!kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android)) {
+    try {
+      await Firebase.initializeApp();
+    } catch (e) {
+      debugPrint('Firebase initialization failed: $e');
+    }
+  }
+
   runApp(const PostureCoachApp());
 }
 
