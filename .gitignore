@@ -1,0 +1,97 @@
+# CrossFit Posture Coach - Flutter .gitignore
+# Commit 1: Git 초기화 및 Flutter 빌드/캐시 파일 무시
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (선택: .vscode/settings.json 등은 추후 필요 시 예외 추가 가능)
+.classpath
+.project
+.settings/
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+
+# Flutter/Dart/Pub
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.lock
+
+# Android
+**/android/**/gradle-wrapper.jar
+.gradle/
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+*.jks
+**/android/local.properties
+**/.cxx/
+
+# iOS / Xcode
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/.sconsign.dblite
+**/ios/**/DerivedData/
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral
+**/ios/Flutter/flutter_assets/
+
+# macOS (Flutter desktop)
+**/macos/Flutter/ephemeral
+**/macos/Pods/
+**/xcuserdata/
+
+# Windows (Flutter desktop)
+**/windows/flutter/ephemeral/
+
+# Linux (Flutter desktop)
+**/linux/flutter/ephemeral/
+
+# Coverage & symbols
+coverage/
+*.symbols
+
+# Environment / secrets (Firebase 등)
+.env
+.env.*
+*.keystore
+GoogleService-Info.plist
+google-services.json
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
