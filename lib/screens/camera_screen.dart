@@ -1,9 +1,14 @@
 // Posture Coach - 카메라 화면
 // Commit 14: camera 플러그인으로 기본 프리뷰/녹화 구현
 
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'video_preview_screen.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -75,9 +80,18 @@ class _CameraScreenState extends State<CameraScreen> {
           _isRecording = false;
         });
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('영상이 저장되었습니다: ${file.path}'),
+
+        // 앱 전용 디렉터리로 파일 이동 후 미리보기 화면으로 전환
+        final appDir = await getApplicationDocumentsDirectory();
+        final destPath =
+            '${appDir.path}/videos/${DateTime.now().millisecondsSinceEpoch}.mp4';
+        final destFile = await File(destPath).create(recursive: true);
+        await File(file.path).copy(destFile.path);
+
+        if (!mounted) return;
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => VideoPreviewScreen(file: destFile),
           ),
         );
       } else {
