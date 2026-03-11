@@ -3,8 +3,12 @@
 
 import 'package:flutter/material.dart';
 
+import '../services/auth_service.dart';
+
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.authService});
+
+  final AuthService? authService;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +16,15 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('CrossFit Posture Coach'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          if (authService != null)
+            TextButton(
+              onPressed: () async {
+                await authService!.signOut();
+              },
+              child: const Text('로그아웃'),
+            ),
+        ],
       ),
       body: Center(
         child: Column(
