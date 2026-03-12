@@ -4,6 +4,7 @@
 // Commit 17: detect() 호출 후 랜드마크 콘솔 출력
 // Commit 18: 오버레이 미리보기 버튼
 // Commit 20: 코칭 텍스트/음성(TTS) 샘플
+// Commit 21: 신체 정보 입력 폼 진입
 
 import 'dart:typed_data';
 
@@ -16,13 +17,16 @@ import '../services/flutter_tts_engine.dart';
 import '../services/pose_detection_mediapipe_adapter.dart';
 import '../services/pose_detection_service.dart';
 import '../services/posture_analyzer.dart';
+import '../services/profile_service.dart';
 import 'camera_screen.dart';
 import 'overlay_preview_screen.dart';
+import 'profile/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, this.authService});
+  const HomeScreen({super.key, this.authService, this.profileService});
 
   final AuthService? authService;
+  final ProfileService? profileService;
 
   static bool get _isMobile =>
       !kIsWeb &&
@@ -93,6 +97,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveProfileService = profileService ?? ProfileService.inMemory();
     return Scaffold(
       appBar: AppBar(
         title: const Text('CrossFit Posture Coach'),
@@ -107,54 +112,52 @@ class HomeScreen extends StatelessWidget {
             ),
         ],
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 8),
-            Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.fitness_center,
-                    size: 80,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '자세 교정 앱',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '환경 세팅 완료 후 촬영·분석 기능이 추가됩니다.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            Text(
-              '오늘의 운동',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: const [
-                Chip(
-                  label: Text('스쿼트'),
-                  avatar: Icon(Icons.directions_run, size: 16),
+        children: [
+          const SizedBox(height: 8),
+          Center(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.fitness_center,
+                  size: 80,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                Chip(
-                  label: Text('데드리프트'),
-                  avatar: Icon(Icons.fitness_center, size: 16),
+                const SizedBox(height: 16),
+                Text(
+                  '자세 교정 앱',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '환경 세팅 완료 후 촬영·분석 기능이 추가됩니다.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
-            const Spacer(),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            '오늘의 운동',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: const [
+              Chip(
+                label: Text('스쿼트'),
+                avatar: Icon(Icons.directions_run, size: 16),
+              ),
+              Chip(
+                label: Text('데드리프트'),
+                avatar: Icon(Icons.fitness_center, size: 16),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
@@ -164,6 +167,23 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const CameraScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.person),
+                label: const Text('신체 정보 입력'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ProfileScreen(
+                        profileService: effectiveProfileService,
+                      ),
                     ),
                   );
                 },
@@ -202,8 +222,8 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () => _onCoachingSample(context),
               ),
             ),
-          ],
-        ),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }
