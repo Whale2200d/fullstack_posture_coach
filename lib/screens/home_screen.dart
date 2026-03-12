@@ -1,6 +1,9 @@
 // Posture Coach - 홈 화면
 // Commit 13: 홈 UI 업데이트 (운동 선택 + 촬영 버튼)
 // Commit 16: 자세 감지 준비 버튼 (MediaPipe 샘플 로그)
+// Commit 17: detect() 호출 후 랜드마크 콘솔 출력
+
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +43,14 @@ class HomeScreen extends StatelessWidget {
         const SnackBar(content: Text('자세 감지 준비됨 (MediaPipe)')),
       );
       debugPrint('PoseDetectionService initialized (MediaPipe)');
+
+      // Commit 17: 샘플 입력으로 detect() 호출 후 랜드마크 콘솔 출력
+      final sampleBytes = Uint8List(256);
+      final result = await service.detect(sampleBytes);
+      debugPrint('PoseDetectionResult: $result');
+      for (var i = 0; i < result.landmarks.length && i < 5; i++) {
+        debugPrint('  landmark[$i]: ${result.landmarks[i]}');
+      }
     } catch (e, st) {
       debugPrint('Pose detection init failed: $e');
       debugPrint(st.toString());

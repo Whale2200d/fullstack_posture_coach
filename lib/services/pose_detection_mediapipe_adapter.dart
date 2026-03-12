@@ -1,4 +1,5 @@
 // Commit 16: MediaPipe 실기기 연동 – NpuPoseDetector 래퍼
+// Commit 17: 랜드마크 추출 – LandmarkPoint 리스트 반환
 
 import 'dart:typed_data';
 
@@ -28,12 +29,25 @@ class MediaPipePoseDetectorAdapter implements IPoseDetector {
       );
     }
     final result = await _detector.detectPose(imageBytes);
-    final landmarkCount = result.hasPoses && result.firstPose != null
-        ? result.firstPose!.landmarks.length
-        : 0;
+    if (!result.hasPoses || result.firstPose == null) {
+      return const PoseDetectionResult(
+        hasPoses: false,
+        landmarkCount: 0,
+        landmarks: [],
+      );
+    }
+    final pose = result.firstPose!;
+    final landmarks = pose.landmarks
+        .map((l) => LandmarkPoint(
+              x: l.x,
+              y: l.y,
+              visibility: l.visibility,
+            ))
+        .toList();
     return PoseDetectionResult(
-      hasPoses: result.hasPoses,
-      landmarkCount: landmarkCount,
+      hasPoses: true,
+      landmarkCount: landmarks.length,
+      landmarks: landmarks,
     );
   }
 
