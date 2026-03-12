@@ -18,6 +18,7 @@ class CoachSessionReviewScreen extends StatefulWidget {
 
 class _CoachSessionReviewScreenState extends State<CoachSessionReviewScreen> {
   CoachFeedbackChoice _choice = CoachFeedbackChoice.none;
+  double _score = 3;
 
   void _toggle(CoachFeedbackChoice next) {
     setState(() {
@@ -92,6 +93,20 @@ class _CoachSessionReviewScreenState extends State<CoachSessionReviewScreen> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 24),
+          Text('점수: ${_score.toInt()}'),
+          Slider(
+            value: _score,
+            min: 1,
+            max: 5,
+            divisions: 4,
+            label: _score.toInt().toString(),
+            onChanged: (v) {
+              setState(() {
+                _score = v;
+              });
+            },
           ),
         ],
       ),
