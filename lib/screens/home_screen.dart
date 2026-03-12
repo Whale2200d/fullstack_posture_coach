@@ -3,6 +3,7 @@
 // Commit 16: 자세 감지 준비 버튼 (MediaPipe 샘플 로그)
 // Commit 17: detect() 호출 후 랜드마크 콘솔 출력
 // Commit 18: 오버레이 미리보기 버튼
+// Commit 20: 코칭 텍스트/음성(TTS) 샘플
 
 import 'dart:typed_data';
 
@@ -10,8 +11,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../services/coaching_service.dart';
+import '../services/flutter_tts_engine.dart';
 import '../services/pose_detection_mediapipe_adapter.dart';
 import '../services/pose_detection_service.dart';
+import '../services/posture_analyzer.dart';
 import 'camera_screen.dart';
 import 'overlay_preview_screen.dart';
 
@@ -61,6 +65,30 @@ class HomeScreen extends StatelessWidget {
         SnackBar(content: Text('자세 감지 준비 실패: $e')),
       );
     }
+  }
+
+  Future<void> _onCoachingSample(BuildContext context) async {
+    // Dummy analysis using PostureAnalyzer (Commit 19 output shape)
+    final analyzer = PostureAnalyzer();
+    final landmarks = List<LandmarkPoint>.generate(
+      33,
+      (_) => const LandmarkPoint(x: 0, y: 0, visibility: 0.0),
+    );
+    // Force an issue: knee too bent
+    landmarks[23] = const LandmarkPoint(x: 0, y: 0, visibility: 0.9);
+    landmarks[25] = const LandmarkPoint(x: 1, y: 0, visibility: 0.9);
+    landmarks[27] = const LandmarkPoint(x: 1, y: 0.2, visibility: 0.9);
+
+    final analysis = analyzer.analyze(landmarks: landmarks);
+    final ttsEngine = _isMobile ? FlutterTtsEngine() : null;
+    final coachingService = CoachingService(tts: ttsEngine);
+    final coaching = coachingService.buildCoaching(analysis);
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(coaching.messages.join('\n'))),
+    );
+    await coachingService.speak(coaching);
   }
 
   @override
@@ -163,6 +191,15 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.record_voice_over),
+                label: const Text('코칭(텍스트/음성) 샘플'),
+                onPressed: () => _onCoachingSample(context),
               ),
             ),
           ],
