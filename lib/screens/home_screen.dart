@@ -5,6 +5,7 @@
 // Commit 18: 오버레이 미리보기 버튼
 // Commit 20: 코칭 텍스트/음성(TTS) 샘플
 // Commit 21: 신체 정보 입력 폼 진입
+// Commit 23: 코치 대시보드 진입
 
 import 'dart:typed_data';
 
@@ -169,6 +170,17 @@ class HomeScreen extends StatelessWidget {
                       builder: (_) => const CameraScreen(),
                     ),
                   );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.dashboard),
+                label: const Text('코치 대시보드'),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/coach');
                 },
               ),
             ),

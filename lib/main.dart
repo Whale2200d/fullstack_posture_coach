@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/auth/auth_gate.dart';
+import 'screens/coach/coach_dashboard_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,9 @@ class PostureCoachApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,
       ),
+      routes: {
+        '/coach': (_) => const CoachDashboardScreen(),
+      },
       home: AuthGate(),
     );
   }
