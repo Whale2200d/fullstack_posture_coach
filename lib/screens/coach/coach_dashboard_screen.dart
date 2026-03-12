@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'coach_session_review_screen.dart';
+
 /// 코치 화면에서 보여줄 세션(더미) 아이템
 class CoachSessionItem {
   const CoachSessionItem({
@@ -83,8 +85,10 @@ class _SessionList extends StatelessWidget {
             subtitle: Text('운동: ${item.exerciseName}'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('세션 선택: ${item.sessionId}')),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => CoachSessionReviewScreen(item: item),
+                ),
               );
             },
           ),
