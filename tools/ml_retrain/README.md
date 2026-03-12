@@ -9,6 +9,11 @@
   - 학습용 `(features, labels)` 데이터셋으로 변환하는 헬퍼 함수 제공.
 - `test_dataset_builder.py`
   - 위 함수가 **isPositive/score → 1/0 라벨 + feature** 로 잘 매핑되는지 검증하는 Python `unittest`.
+- `retrain_job.py`
+  - 재학습 실행 여부를 판단하는 `should_retrain_now` 와,
+  - 실제 배치 환경에서 주기적으로 호출될 `run_retrain_if_needed` 뼈대 함수 정의.
+- `test_retrain_job.py`
+  - 라벨 개수/시간 조건을 바꿔가며 `should_retrain_now` 동작을 검증하는 테스트.
 
 ## 사용 예시 (로컬에서 수동 실행)
 
@@ -20,6 +25,9 @@ cd tools/ml_retrain
 
 # 테스트 실행
 python -m unittest test_dataset_builder.py
+
+# 재학습 트리거 로직 테스트
+python -m unittest test_retrain_job.py
 ```
 
 ## 데이터 흐름과 연계

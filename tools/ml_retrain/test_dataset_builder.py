@@ -5,7 +5,7 @@
 
 import unittest
 
-from ml_retrain.dataset_builder import build_training_dataset
+from dataset_builder import build_training_dataset
 
 
 class DatasetBuilderTest(unittest.TestCase):
