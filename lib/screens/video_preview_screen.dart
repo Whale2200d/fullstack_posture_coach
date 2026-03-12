@@ -3,10 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../services/video_upload_service.dart';
+
 class VideoPreviewScreen extends StatefulWidget {
-  const VideoPreviewScreen({super.key, required this.file});
+  const VideoPreviewScreen({
+    super.key,
+    required this.file,
+    this.uploader,
+  });
 
   final File file;
+  final IVideoUploader? uploader;
 
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
@@ -15,6 +22,7 @@ class VideoPreviewScreen extends StatefulWidget {
 class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
   late final VideoPlayerController _controller;
   Future<void>? _initializeFuture;
+  bool _uploading = false;
 
   @override
   void initState() {
@@ -37,6 +45,18 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('촬영 영상 미리보기'),
+        actions: [
+          TextButton(
+            onPressed: _uploading ? null : _onUpload,
+            child: _uploading
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('업로드'),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: _initializeFuture,
@@ -69,6 +89,37 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _onUpload() async {
+    final uploader = widget.uploader;
+    if (uploader == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('업로드 기능은 아직 설정되지 않았습니다.')),
+      );
+      return;
+    }
+
+    setState(() => _uploading = true);
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final url = await uploader.uploadVideo(
+        file: widget.file,
+        storagePath: 'videos/$now.mp4',
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('업로드 완료: $url')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('업로드 실패: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
   }
 }
 

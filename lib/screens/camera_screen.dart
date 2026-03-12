@@ -4,10 +4,12 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../services/firebase_storage_video_uploader.dart';
 import 'video_preview_screen.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -91,7 +93,10 @@ class _CameraScreenState extends State<CameraScreen> {
         if (!mounted) return;
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => VideoPreviewScreen(file: destFile),
+            builder: (_) => VideoPreviewScreen(
+              file: destFile,
+              uploader: Firebase.apps.isEmpty ? null : FirebaseStorageVideoUploader(),
+            ),
           ),
         );
       } else {
