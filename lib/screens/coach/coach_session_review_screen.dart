@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'coach_dashboard_screen.dart';
 import '../../services/feedback_repository.dart';
+import '../../services/notification_service.dart';
 
 enum CoachFeedbackChoice { none, like, dislike }
 
@@ -12,10 +13,12 @@ class CoachSessionReviewScreen extends StatefulWidget {
     super.key,
     required this.item,
     this.feedbackRepository,
+    this.notificationService,
   });
 
   final CoachSessionItem item;
   final IFeedbackRepository? feedbackRepository;
+  final INotificationService? notificationService;
 
   @override
   State<CoachSessionReviewScreen> createState() =>
@@ -72,6 +75,14 @@ class _CoachSessionReviewScreenState extends State<CoachSessionReviewScreen> {
       score: _score.toInt(),
     );
     await repo.saveFeedback(data);
+
+    final notifier = widget.notificationService;
+    if (notifier != null) {
+      await notifier.sendLocal(
+        '피드백 저장',
+        '세션 ${widget.item.sessionId} 피드백이 저장되었습니다',
+      );
+    }
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

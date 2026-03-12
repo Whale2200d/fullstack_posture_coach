@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/firestore_feedback_repository.dart';
+import '../../services/firebase_notification_service.dart';
 import 'coach_session_review_screen.dart';
 
 /// 코치 화면에서 보여줄 세션(더미) 아이템
@@ -94,6 +95,9 @@ class _SessionList extends StatelessWidget {
                     feedbackRepository: Firebase.apps.isEmpty
                         ? null
                         : FirestoreFeedbackRepository(),
+                    notificationService: Firebase.apps.isEmpty
+                        ? null
+                        : FirebaseNotificationService(),
                   ),
                 ),
               );
