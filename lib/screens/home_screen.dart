@@ -2,6 +2,7 @@
 // Commit 13: 홈 UI 업데이트 (운동 선택 + 촬영 버튼)
 // Commit 16: 자세 감지 준비 버튼 (MediaPipe 샘플 로그)
 // Commit 17: detect() 호출 후 랜드마크 콘솔 출력
+// Commit 18: 오버레이 미리보기 버튼
 
 import 'dart:typed_data';
 
@@ -12,6 +13,7 @@ import '../services/auth_service.dart';
 import '../services/pose_detection_mediapipe_adapter.dart';
 import '../services/pose_detection_service.dart';
 import 'camera_screen.dart';
+import 'overlay_preview_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, this.authService});
@@ -146,6 +148,21 @@ class HomeScreen extends StatelessWidget {
                 icon: const Icon(Icons.psychology),
                 label: const Text('자세 감지 준비'),
                 onPressed: () => _onPoseDetectionReady(context),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.graphic_eq),
+                label: const Text('오버레이 미리보기'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const OverlayPreviewScreen(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
