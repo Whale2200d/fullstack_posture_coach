@@ -1,15 +1,67 @@
 // Posture Coach - 홈 화면
 // Commit 13: 홈 UI 업데이트 (운동 선택 + 촬영 버튼)
+// Commit 16: 자세 감지 준비 버튼 (MediaPipe 샘플 로그)
+// Commit 17: detect() 호출 후 랜드마크 콘솔 출력
+// Commit 18: 오버레이 미리보기 버튼
 
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../services/pose_detection_mediapipe_adapter.dart';
+import '../services/pose_detection_service.dart';
 import 'camera_screen.dart';
+import 'overlay_preview_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, this.authService});
 
   final AuthService? authService;
+
+  static bool get _isMobile =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android);
+
+  Future<void> _onPoseDetectionReady(BuildContext context) async {
+    if (!_isMobile) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('자세 감지는 iOS/Android에서만 사용 가능합니다.'),
+        ),
+      );
+      return;
+    }
+    try {
+      final service = PoseDetectionService(
+        adapter: MediaPipePoseDetectorAdapter(),
+      );
+      await service.initialize();
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('자세 감지 준비됨 (MediaPipe)')),
+      );
+      debugPrint('PoseDetectionService initialized (MediaPipe)');
+
+      // Commit 17: 샘플 입력으로 detect() 호출 후 랜드마크 콘솔 출력
+      final sampleBytes = Uint8List(256);
+      final result = await service.detect(sampleBytes);
+      debugPrint('PoseDetectionResult: $result');
+      for (var i = 0; i < result.landmarks.length && i < 5; i++) {
+        debugPrint('  landmark[$i]: ${result.landmarks[i]}');
+      }
+    } catch (e, st) {
+      debugPrint('Pose detection init failed: $e');
+      debugPrint(st.toString());
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('자세 감지 준비 실패: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +136,30 @@ class HomeScreen extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const CameraScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.psychology),
+                label: const Text('자세 감지 준비'),
+                onPressed: () => _onPoseDetectionReady(context),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.graphic_eq),
+                label: const Text('오버레이 미리보기'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const OverlayPreviewScreen(),
                     ),
                   );
                 },
