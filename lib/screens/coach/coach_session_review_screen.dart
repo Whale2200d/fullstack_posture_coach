@@ -3,13 +3,19 @@
 import 'package:flutter/material.dart';
 
 import 'coach_dashboard_screen.dart';
+import '../../services/feedback_repository.dart';
 
 enum CoachFeedbackChoice { none, like, dislike }
 
 class CoachSessionReviewScreen extends StatefulWidget {
-  const CoachSessionReviewScreen({super.key, required this.item});
+  const CoachSessionReviewScreen({
+    super.key,
+    required this.item,
+    this.feedbackRepository,
+  });
 
   final CoachSessionItem item;
+  final IFeedbackRepository? feedbackRepository;
 
   @override
   State<CoachSessionReviewScreen> createState() =>
@@ -35,6 +41,42 @@ class _CoachSessionReviewScreenState extends State<CoachSessionReviewScreen> {
       case CoachFeedbackChoice.none:
         return '없음';
     }
+  }
+
+  bool? get _isPositive {
+    switch (_choice) {
+      case CoachFeedbackChoice.like:
+        return true;
+      case CoachFeedbackChoice.dislike:
+        return false;
+      case CoachFeedbackChoice.none:
+        return null;
+    }
+  }
+
+  Future<void> _onSave() async {
+    final repo = widget.feedbackRepository;
+    if (repo == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('피드백 저장소가 설정되지 않았습니다.')),
+      );
+      return;
+    }
+
+    final data = FeedbackData(
+      sessionId: widget.item.sessionId,
+      userEmail: widget.item.userEmail,
+      exerciseName: widget.item.exerciseName,
+      isPositive: _isPositive,
+      score: _score.toInt(),
+    );
+    await repo.saveFeedback(data);
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('피드백이 저장되었습니다.')),
+    );
   }
 
   @override
@@ -107,6 +149,14 @@ class _CoachSessionReviewScreenState extends State<CoachSessionReviewScreen> {
                 _score = v;
               });
             },
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: _onSave,
+              child: const Text('저장'),
+            ),
           ),
         ],
       ),

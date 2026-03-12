@@ -1,7 +1,9 @@
 // Commit 23: 코치(관리자) 대시보드 기본 UI (Flutter Web 지원)
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/firestore_feedback_repository.dart';
 import 'coach_session_review_screen.dart';
 
 /// 코치 화면에서 보여줄 세션(더미) 아이템
@@ -87,7 +89,12 @@ class _SessionList extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => CoachSessionReviewScreen(item: item),
+                  builder: (_) => CoachSessionReviewScreen(
+                    item: item,
+                    feedbackRepository: Firebase.apps.isEmpty
+                        ? null
+                        : FirestoreFeedbackRepository(),
+                  ),
                 ),
               );
             },
