@@ -9,11 +9,21 @@ def extract_keypoints_from_result(result) -> List[List[float]]:
               최소한 .keypoints 속성이 있다고 가정한다.
 
   Returns:
-      각 사람에 대한 keypoints flat 리스트의 리스트.
-      예: [[x1,y1,conf1, x2,y2,conf2,...], [...], ...]
+      각 사람에 대한 keypoints 리스트.
+      예: [[[x,y,conf], ...], ...] 중 한 사람의 [[x,y,conf], ...] 형태.
   """
-  keypoints = getattr(result, "keypoints", None)
-  if keypoints is None:
+  kpts = getattr(result, "keypoints", None)
+  if kpts is None:
     return []
-  return [list(kp) for kp in keypoints]
+
+  data = getattr(kpts, "data", None)
+  if data is None:
+    return []
+
+  # data: tensor[num_person, num_kpts, 3]
+  persons = []
+  for i in range(data.shape[0]):
+    persons.append(data[i].tolist())  # [[x,y,conf], ...]
+
+  return persons
 

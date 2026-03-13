@@ -30,10 +30,15 @@ def main():
   results = model(args.image)
 
   for i, res in enumerate(results):
+    # 디버그: keypoints 구조 출력
+    kpts = getattr(res, "keypoints", None)
+    print(f"[Result {i}] keypoints type={type(kpts)}, shape={getattr(kpts, 'shape', None)}")
+
     keypoints_list = extract_keypoints_from_result(res)
     print(f"[Result {i}] found {len(keypoints_list)} persons")
 
     for person_idx, kps in enumerate(keypoints_list):
+      print(f"  raw keypoints[{person_idx}]: {kps[:2]}")
       landmarks = yolo_keypoints_to_landmarks(
         kps,
         image_width=res.orig_shape[1],
