@@ -93,7 +93,37 @@ MVP 단계에서 **MediaPipe Pose** 를 기본 선택으로 하는 이유를 기
 
 ---
 
-## 6. Commit/히스토리에서의 역할
+## 6. 간단 실험 결과 요약 (Commit 31~34)
+
+> 아래 결과는 로컬 Mac 환경에서 **예시 이미지 1장** 기준으로 측정한,  
+> 초기 프로토타입 수준의 관찰값입니다. 최종 벤치마크가 아니라 방향성 참고용입니다.
+
+- **테스트 환경**
+  - 기기: Apple Silicon Mac (로컬 Python)
+  - 모델: `yolov8n-pose.pt`
+  - 이미지: `crossfit_squat_side_view.jpg` (단일 인물, 스쿼트 옆모습)
+
+- **YOLOv8-Pose**
+  - 추론 속도: 약 **45~55ms / 이미지 1장** (로그 기준: `41.5ms`, `49.6ms` 등)
+  - 출력: `keypoints.shape = torch.Size([1, 17, 3])` (1명, 17개 관절, (x,y,conf))
+  - `tools/yolo_experiments/yolo_pose_utils.py` 로 정규화한 결과:
+    - `x, y` 는 0~1 범위, `visibility` 에 confidence(0~1) 매핑
+    - 무릎/엉덩이/어깨 등 주요 관절 위치가 시각적으로 자연스러움
+
+- **MediaPipe Pose (예상/기존 문헌 + 모바일 기준)**
+  - 모바일 디바이스에서 Lite 구성 기준 **~30fps(≒ 33ms/frame) 이상** 보고 사례 다수
+  - 33개 랜드마크 제공, 상·하체/발끝까지 보다 세밀한 포인트를 제공
+  - Flutter 연동이 이미 구현되어 있고(on-device), 실시간 미리보기와 잘 결합됨
+
+- **1장 이미지 기준 결론**
+  - YOLOv8-Pose(nano)는 속도가 나쁘지 않지만,  
+    - Mac 데스크톱에서 ~50ms 수준 → 모바일 온디바이스로 옮기면 더 느려질 가능성이 큼.
+  - MediaPipe Pose는 이미 **모바일 실시간용으로 최적화된 구조 + 풍부한 Flutter 통합 예제**를 갖고 있어,  
+    초기 MVP에서는 여전히 MediaPipe를 메인으로 사용하는 것이 합리적이다.
+
+---
+
+## 7. Commit/히스토리에서의 역할
 
 - **Commit 6** 에서는 실제 코드 변경 대신,  
   - MediaPipe Pose vs YOLOv8-Pose 의 **비교 문서**를 추가하고,
