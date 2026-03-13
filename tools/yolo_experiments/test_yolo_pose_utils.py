@@ -10,15 +10,11 @@ from yolo_pose_utils import yolo_keypoints_to_landmarks
 
 class YoloPoseUtilsTest(unittest.TestCase):
   def test_convert_yolo_keypoints_to_landmarks(self):
-    # YOLOv8-Pose keypoints 포맷 예시: [x, y, confidence] * N
-    # 여기서는 임의의 두 랜드마크만 사용.
+    # YOLOv8-Pose keypoints 포맷 예시: [[x, y, confidence], ...]
+    # (torch.Size([num_kpts, 3])를 list로 표현한 형태)
     keypoints = [
-      100.0,
-      200.0,
-      0.9,  # nose
-      150.0,
-      250.0,
-      0.8,  # left_eye
+      [100.0, 200.0, 0.9],  # nose
+      [150.0, 250.0, 0.8],  # left_eye
     ]
     image_w, image_h = 640, 480
 
