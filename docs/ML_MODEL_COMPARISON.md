@@ -133,3 +133,25 @@ MVP 단계에서 **MediaPipe Pose** 를 기본 선택으로 하는 이유를 기
   - 어떤 시나리오(단일/다중 인물)를 테스트해야 하는지  
   를 빠르게 파악할 수 있다.
 
+---
+
+## 8. 정식 채택 – 앱 내 공식 모델 경로 (Commit 36)
+
+YOLO 실험(Commit 31~35) 결과를 바탕으로, **앱에서 사용하는 포즈 추정 파이프라인은 MediaPipe 기반으로 정식 채택**합니다.
+
+- **채택 모델**: MediaPipe Pose (Flutter: `flutter_pose_detection` 패키지, `NpuPoseDetector` 사용)
+- **실험 코드 위치**: YOLOv8-Pose 관련 코드는 `tools/yolo_experiments/` 에만 두며, 앱(`lib/`)에서는 사용하지 않음. 추후 Phase 2 등에서 재검토 시 참고용으로 활용.
+
+### 8.1 앱 내 공식 파이프라인 구성
+
+| 역할 | 파일 | 설명 |
+|------|------|------|
+| 포즈 추정 인터페이스/결과 | `lib/services/pose_detection_service.dart` | `IPoseDetector`, `PoseDetectionResult`, `LandmarkPoint`, `PoseDetectionService` |
+| MediaPipe 구현체 | `lib/services/pose_detection_mediapipe_adapter.dart` | `MediaPipePoseDetectorAdapter` – `flutter_pose_detection`의 `NpuPoseDetector` 래핑 |
+| 각도 계산 | `lib/services/pose_angle_math.dart` | 세 점 기준 각도(도 단위) 계산 |
+| 자세 분석 | `lib/services/posture_analyzer.dart` | `PostureAnalyzer` – 랜드마크 → 각도/이슈 도출, `PostureAnalysisResult` |
+| 스켈레톤 오버레이 | `lib/widgets/pose_skeleton_overlay.dart` | `PoseSkeletonOverlay`, `PoseSkeletonPainter` – 랜드마크를 선으로 그리기 |
+
+실시간 플로우: **카메라 프레임 → PoseDetectionService.detect() → LandmarkPoint 목록 → PostureAnalyzer.analyze() → 코칭 서비스/오버레이**.  
+새 포즈 모델을 붙일 경우 `IPoseDetector` 구현체만 추가/교체하면 되도록 설계되어 있습니다.
+
