@@ -1,7 +1,8 @@
 # Posture Coach (Flutter)
 
 카메라 기반 자세 분석으로 크로스 트레이닝(스쿼트, 데드리프트 등) 동작을 교정하는 모바일/웹 앱입니다.  
-초기 버전은 Flutter + Firebase 기반으로 iOS/Android/웹(Chrome, macOS 데스크톱)을 모두 지원하는 것을 목표로 합니다.
+초기 버전은 Flutter + Firebase 기반으로 iOS/Android/웹(Chrome, macOS 데스크톱)을 모두 지원하는 것을 목표로 합니다.  
+포즈 추정은 **MediaPipe Pose**를 정식 채택(Commit 36). 상세 파이프라인은 `docs/ML_MODEL_COMPARISON.md` §8 참고.
 
 ---
 

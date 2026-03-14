@@ -13,6 +13,7 @@
 - **MVP 범위 (Phase 1)**
   - 운동: 스쿼트, 데드리프트 중심.
   - 플랫폼: iOS/Android + macOS/Chrome.
+  - **포즈 추정**: MediaPipe Pose를 **정식 채택** (Commit 36). YOLO 실험(31~35) 후 앱 내 공식 경로는 `PoseDetectionService` + `MediaPipePoseDetectorAdapter` + `PostureAnalyzer` 조합. 상세는 `docs/ML_MODEL_COMPARISON.md` §8 참고.
   - 핵심 플로우:
     1. 로그인 → 신체 정보 입력
     2. 카메라 촬영 → MediaPipe Pose로 랜드마크/각도 계산
