@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../services/offline_upload_queue.dart';
 import '../services/video_upload_service.dart';
 
 class VideoPreviewScreen extends StatefulWidget {
@@ -10,10 +11,12 @@ class VideoPreviewScreen extends StatefulWidget {
     super.key,
     required this.file,
     this.uploader,
+    this.offlineQueue,
   });
 
   final File file;
   final IVideoUploader? uploader;
+  final IOfflineUploadQueue? offlineQueue;
 
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
@@ -104,19 +107,31 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     setState(() => _uploading = true);
     try {
       final now = DateTime.now().millisecondsSinceEpoch;
+      final storagePath = 'videos/$now.mp4';
       final url = await uploader.uploadVideo(
         file: widget.file,
-        storagePath: 'videos/$now.mp4',
+        storagePath: storagePath,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('업로드 완료: $url')),
       );
     } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('업로드 실패: $e')),
-      );
+      final queue = widget.offlineQueue;
+      if (queue != null) {
+        await queue.enqueue(widget.file.path);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('업로드 실패: 오프라인 업로드 큐에 저장되었습니다.'),
+          ),
+        );
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('업로드 실패: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _uploading = false);
     }
