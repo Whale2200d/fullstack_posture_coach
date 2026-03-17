@@ -7,6 +7,7 @@
 // Commit 21: 신체 정보 입력 폼 진입
 // Commit 23: 코치 대시보드 진입
 
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -15,11 +16,14 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/coaching_service.dart';
 import '../services/flutter_tts_engine.dart';
+import '../services/offline_upload_queue.dart';
 import '../services/pose_detection_mediapipe_adapter.dart';
 import '../services/pose_detection_service.dart';
 import '../services/posture_analyzer.dart';
 import '../services/profile_service.dart';
+import '../services/video_upload_service.dart';
 import 'camera_screen.dart';
+import 'offline_upload_screen.dart';
 import 'overlay_preview_screen.dart';
 import 'profile/profile_screen.dart';
 
@@ -234,9 +238,37 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () => _onCoachingSample(context),
               ),
             ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.cloud_upload),
+                label: const Text('오프라인 업로드 관리'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => OfflineUploadScreen(
+                        queue: MemoryOfflineUploadQueue(),
+                        uploader: _DummyNoopUploader(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           const SizedBox(height: 24),
         ],
       ),
     );
+  }
+}
+
+class _DummyNoopUploader implements IVideoUploader {
+  @override
+  Future<String> uploadVideo({
+    required File file,
+    required String storagePath,
+  }) async {
+    return '';
   }
 }
