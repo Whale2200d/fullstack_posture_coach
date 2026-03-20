@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../services/offline_upload_queue.dart';
+import '../services/session_repository.dart';
 import '../services/video_upload_service.dart';
 
 class VideoPreviewScreen extends StatefulWidget {
@@ -12,11 +13,19 @@ class VideoPreviewScreen extends StatefulWidget {
     required this.file,
     this.uploader,
     this.offlineQueue,
+    this.sessionRepository,
+    this.userEmail,
+    this.userId,
+    this.exerciseName = 'squat',
   });
 
   final File file;
   final IVideoUploader? uploader;
   final IOfflineUploadQueue? offlineQueue;
+  final ISessionRepository? sessionRepository;
+  final String? userEmail;
+  final String? userId;
+  final String exerciseName;
 
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
@@ -112,10 +121,31 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         file: widget.file,
         storagePath: storagePath,
       );
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('업로드 완료: $url')),
       );
+
+      final repo = widget.sessionRepository;
+      if (repo != null) {
+        try {
+          await repo.save(
+            SessionRecord(
+              userEmail: widget.userEmail ?? '',
+              exerciseName: widget.exerciseName,
+              storagePath: storagePath,
+              downloadUrl: url,
+              userId: widget.userId,
+            ),
+          );
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('세션 기록 저장 실패(업로드는 완료됨): $e')),
+          );
+        }
+      }
     } catch (e) {
       final queue = widget.offlineQueue;
       if (queue != null) {
