@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:posture_coach/models/coach_session_item.dart';
 import 'package:posture_coach/screens/coach/coach_session_review_screen.dart';
-import 'package:posture_coach/screens/coach/coach_dashboard_screen.dart';
 
 void main() {
   testWidgets('👍/👎는 상호배타 토글이며 다시 누르면 해제된다', (tester) async {

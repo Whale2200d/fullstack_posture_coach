@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:posture_coach/screens/coach/coach_dashboard_screen.dart';
+import 'package:posture_coach/models/coach_session_item.dart';
 import 'package:posture_coach/screens/coach/coach_session_review_screen.dart';
 
 void main() {
