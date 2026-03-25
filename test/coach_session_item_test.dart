@@ -17,6 +17,7 @@ void main() {
     expect(item.sessionId, 'docAbc');
     expect(item.userEmail, 'u@example.com');
     expect(item.exerciseName, '스쿼트');
+    expect(item.videoDownloadUrl, 'https://example.com/x');
   });
 
   test('deadlift는 데드리프트로 표시된다', () {
