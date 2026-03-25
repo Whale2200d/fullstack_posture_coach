@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'coach_dashboard_screen.dart';
+import '../../models/coach_session_item.dart';
 import '../../services/feedback_repository.dart';
 import '../../services/notification_service.dart';
 

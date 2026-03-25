@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'screens/auth/auth_gate.dart';
 import 'screens/coach/coach_dashboard_screen.dart';
+import 'services/firestore_session_list_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,11 @@ class PostureCoachApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/coach': (_) => const CoachDashboardScreen(),
+        '/coach': (_) => CoachDashboardScreen(
+              sessionListRepository: Firebase.apps.isEmpty
+                  ? null
+                  : FirestoreSessionListRepository(),
+            ),
       },
       home: AuthGate(),
     );
